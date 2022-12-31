@@ -1,16 +1,36 @@
-# Lago Node.js Client
+# Lago JavaScript Client
 
-This is a Node.js wrapper for Lago API
+This is a JavaScript wrapper for Lago API. Works in Cloudflare Workers, Deno, and Node.js. Generated from [the Lago Swagger document](https://swagger.getlago.com/#/).
 
 [![PyPI version](https://badge.fury.io/js/lago-nodejs-client.svg)](https://badge.fury.io/js/lago-nodejs-client)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 ## Installation
 
-Install the lago-nodejs-client via npm:
+Install the `lago-nodejs-client` via npm:
+
 ```bash
 npm install lago-nodejs-client
 ```
+
+## Compatibility
+
+This SDK uses the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) and natively supported Node.js version >= 18. For other Node versions:
+
+1. Ideally, run Node with the [`--experimental-fetch` flag](https://nodejs.org/docs/latest-v16.x/api/cli.html#--experimental-fetch)
+
+1. Otherwise, polyfill the Fetch API by doing both:
+
+    1. [Patching globalThis](https://github.com/node-fetch/node-fetch#providing-global-access)
+
+    1. [Pass a Fetch instance](https://github.com/node-fetch/node-fetch#loading-and-configuring-the-module) to the Lago client
+
+        ```typescript
+        import { Client } from 'lago-nodejs-client';
+        import fetch from 'node-fetch';
+
+        Client("api_key", { customFetch: fetch });
+        ```
 
 ## Usage
 
@@ -18,16 +38,30 @@ Check the [lago API reference](https://doc.getlago.com/docs/api/intro)
 
 ## Development
 
-### Install the dependencies
+Uses [dnt](https://github.com/denoland/dnt) to build and test for Deno and Node.
 
-```bash
-yarn
-```
+### Dependencies
+
+Requires [Deno](https://deno.land/) and [Node.js >= 18](https://nodejs.org/en/)
 
 ### Run tests
 
 ```bash
-yarn test
+deno task test
+```
+
+### Build
+
+```bash
+deno task build
+```
+
+### Publish to NPM
+
+```bash
+deno task build
+cd npm
+npm publish
 ```
 
 ## Documentation
